@@ -56,10 +56,12 @@ const Jogo = () => {
     { nome: 'Jogador 4', posicao: 0, cor: 'azul' }
   ]);
   const [jogadorAtual, setJogadorAtual] = useState(0);
+  const [jogadorTentandoVencer, setJogadorTentandoVencer] = useState(null);
+  const [categoriasDisponiveis, setCategoriasDisponiveis] = useState(['Ciências', 'História', 'Geografia', 'Diversos']);
 
   const handleCategoriaSelecionada = (categoria) => {
     setCategoriaSelecionada(categoria);
-    setIndiceAtual(0); 
+    setIndiceAtual(0); // Reinicia o índice para a nova categoria
   };
 
   const handleRespostaSelecionada = (resposta, dificuldade) => {
@@ -71,9 +73,11 @@ const Jogo = () => {
       const novosJogadores = [...jogadores];
       novosJogadores[jogadorAtual].posicao += novaPosicao;
 
-      if (novosJogadores[jogadorAtual].posicao >= 6) {
-        alert(`${novosJogadores[jogadorAtual].nome} venceu o jogo!`);
-        novosJogadores[jogadorAtual].posicao = 6; 
+      if (novosJogadores[jogadorAtual].posicao >= 5) {
+        setJogadorTentandoVencer(jogadorAtual);
+        setCategoriaSelecionada(null);
+        setJogadorAtual((jogadorAtual + 1) % jogadores.length);
+        return;
       }
 
       setJogadores(novosJogadores);
@@ -83,27 +87,55 @@ const Jogo = () => {
     if (proximaPergunta < perguntas[categoriaSelecionada][dificuldade].length) {
       setIndiceAtual(proximaPergunta);
     } else {
-      setCategoriaSelecionada(null); 
+      setCategoriaSelecionada(null); // Reinicia para seleção de categoria
     }
 
     setJogadorAtual((jogadorAtual + 1) % jogadores.length);
   };
 
+  const handleRespostaFinal = (resposta, dificuldade) => {
+    const perguntaCorreta = perguntas[categoriaSelecionada][dificuldade][indiceAtual].correta;
+
+    if (resposta === perguntaCorreta) {
+      alert(`${jogadores[jogadorTentandoVencer].nome} venceu o jogo!`);
+      setJogadores(jogadores.map((j, idx) => ({ ...j, posicao: idx === jogadorTentandoVencer ? 6 : j.posicao })));
+    } else {
+      alert(`${jogadores[jogadorTentandoVencer].nome} errou!`);
+      setJogadorAtual((jogadorTentandoVencer + 1) % jogadores.length);
+    }
+
+    setJogadorTentandoVencer(null);
+    setCategoriaSelecionada(null);
+  };
+
   return (
     <div>
-      {categoriaSelecionada ? (
-        <Pergunta
-          categoria={categoriaSelecionada}
-          perguntaFacil={perguntas[categoriaSelecionada].facil[indiceAtual].pergunta}
-          respostas={perguntas[categoriaSelecionada].facil[indiceAtual].respostas}
-          perguntaDificil={perguntas[categoriaSelecionada].dificil[indiceAtual].pergunta}
-          onRespostaSelecionada={handleRespostaSelecionada}
-        />
+      {jogadorTentandoVencer !== null && !categoriaSelecionada ? (
+        <div>
+          <h2>{jogadores[jogadorTentandoVencer].nome}, escolha uma categoria final:</h2>
+          {categoriasDisponiveis.map(categoria => (
+            <button key={categoria} onClick={() => handleCategoriaSelecionada(categoria)} style={{ padding: '10px', fontSize: '16px', margin: '5px' }}>
+              {categoria}
+            </button>
+          ))}
+        </div>
       ) : (
-        <RoletaCategorias
-          jogadorAtual={jogadores[jogadorAtual]}
-          onCategoriaSelecionada={handleCategoriaSelecionada}
-        />
+        <>
+          {categoriaSelecionada ? (
+            <Pergunta
+              categoria={categoriaSelecionada}
+              perguntaFacil={perguntas[categoriaSelecionada].facil[indiceAtual].pergunta}
+              respostas={perguntas[categoriaSelecionada].facil[indiceAtual].respostas}
+              perguntaDificil={perguntas[categoriaSelecionada].dificil[indiceAtual].pergunta}
+              onRespostaSelecionada={jogadorTentandoVencer !== null ? handleRespostaFinal : handleRespostaSelecionada}
+            />
+          ) : (
+            <RoletaCategorias
+              jogadorAtual={jogadores[jogadorAtual]}
+              onCategoriaSelecionada={handleCategoriaSelecionada}
+            />
+          )}
+        </>
       )}
       <Tabuleiro jogadores={jogadores} />
       <p>Pontuação: {jogadores.map(j => `${j.nome}: ${j.posicao}`).join(', ')}</p>
@@ -112,8 +144,3 @@ const Jogo = () => {
 };
 
 export default Jogo;
-
-
-
-
-

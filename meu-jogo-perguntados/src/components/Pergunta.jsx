@@ -52,5 +52,3 @@ const Pergunta = ({ categoria, perguntaFacil, perguntaDificil, respostas, onResp
 };
 
 export default Pergunta;
-
-

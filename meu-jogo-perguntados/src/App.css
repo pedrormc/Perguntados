@@ -18,11 +18,34 @@ p {
 
 h2, h3 {
   font-size: 24px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
-div {
-  margin: 20px;
+.tabuleiro {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
 }
+
+.trilha {
+  margin: 10px;
+}
+
+.trilha h3 {
+  text-align: center;
+}
+
+.casa {
+  width: 50px;
+  height: 50px;
+  margin: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: rgb(253, 0, 0);
+}
+
+
 
 

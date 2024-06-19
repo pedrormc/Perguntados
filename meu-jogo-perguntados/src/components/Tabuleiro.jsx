@@ -1,39 +1,54 @@
 import React from 'react';
 
-const trilhas = [
-  { cor: 'amarela', nome: 'Ciências', corHex: '#FFEB3B' },
-  { cor: 'rosa', nome: 'História', corHex: '#E91E63' },
-  { cor: 'vermelha', nome: 'Geografia', corHex: '#F44336' },
-  { cor: 'azul', nome: 'Diversos', corHex: '#2196F3' }
-];
-
 const Tabuleiro = ({ jogadores }) => {
+  const trilha = ['#FFFF00', '#FF69B4', '#FF4500', '#1E90FF']; // Amarelo, Rosa, Vermelho, Azul
+
+  const desenharTabuleiro = () => {
+    const casas = [];
+    for (let i = 0; i < 6; i++) {
+      casas.push(
+        <div key={i} style={{ display: 'flex', justifyContent: 'space-around' }}>
+          {trilha.map((cor, index) => (
+            <div
+              key={index}
+              style={{
+                width: '50px',
+                height: '50px',
+                backgroundColor: cor,
+                position: 'relative',
+                border: '1px solid #000'
+              }}
+            >
+              {jogadores[index].posicao === i ? <img
+                  src="/miapika.png"
+                  alt="Marcador de jogador"
+                  style={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    width: '30px',
+                    height: '30px'
+                  }}
+                /> : ''}
+            </div>
+          ))}
+        </div>
+      );
+    }
+    return casas;
+  };
+
   return (
     <div>
-      {trilhas.map((trilha, index) => (
-        <div key={index} style={{ marginBottom: '20px' }}>
-          <h3 style={{ color: trilha.corHex }}>{trilha.nome}</h3>
-          <div style={{ display: 'flex', gap: '10px' }}>
-            {[...Array(6)].map((_, i) => (
-              <div
-                key={i}
-                style={{
-                  width: '50px',
-                  height: '50px',
-                  backgroundColor: jogadores[index].posicao === i ? trilha.corHex : '#EEE',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}
-              >
-                {jogadores[index].posicao === i ? jogadores[index].nome : ''}
-              </div>
-            ))}
-          </div>
-        </div>
-      ))}
+      <h3>Tabuleiro</h3>
+      {desenharTabuleiro()}
     </div>
   );
 };
 
 export default Tabuleiro;
+
+
+
+
