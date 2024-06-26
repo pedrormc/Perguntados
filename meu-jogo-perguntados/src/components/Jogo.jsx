@@ -46,6 +46,13 @@ const perguntas = {
   }
 };
 
+const categorias = {
+  Ciências: '/imagens/bio1.png',
+  História: '/imagens/bio2.png',
+  Geografia: '/imagens/mat1.png',
+  Diversos: '/imagens/mat2.png'
+};
+
 const Jogo = () => {
   const [categoriaSelecionada, setCategoriaSelecionada] = useState(null);
   const [indiceAtual, setIndiceAtual] = useState(0);

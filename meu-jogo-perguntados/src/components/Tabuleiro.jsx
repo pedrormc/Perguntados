@@ -19,7 +19,8 @@ const Tabuleiro = ({ jogadores }) => {
                 border: '1px solid #000'
               }}
             >
-              {jogadores[index].posicao === i ? <img
+              {jogadores[index].posicao === i ? (
+                <img
                   src="/miapika.png"
                   alt="Marcador de jogador"
                   style={{
@@ -30,7 +31,8 @@ const Tabuleiro = ({ jogadores }) => {
                     width: '30px',
                     height: '30px'
                   }}
-                /> : ''}
+                />
+              ) : null}
             </div>
           ))}
         </div>
@@ -48,6 +50,7 @@ const Tabuleiro = ({ jogadores }) => {
 };
 
 export default Tabuleiro;
+
 
 
 
